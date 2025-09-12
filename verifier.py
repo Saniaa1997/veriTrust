@@ -5,19 +5,23 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Replace this with your NewsAPI key
-NEWS_API_KEY = "YOUR_NEWS_API_KEY"
+NEWS_API_KEY = "0b81860a23a24383bf0e605ca2ef8bf7"
+
+import requests
 
 def fetch_related_articles(query):
-    url = f"https://newsapi.org/v2/everything?q={query}&language=en&pageSize=5&apiKey={NEWS_API_KEY}"
+    """Fetch top 5 related news article titles from NewsAPI."""
+    url = (
+        f"https://newsapi.org/v2/everything?q={query}"
+        f"&sortBy=relevancy&pageSize=5&apiKey={NEWS_API_KEY}"
+    )
     response = requests.get(url)
-    
-    if response.status_code == 200:
-        articles = response.json()["articles"]
-        titles = [article["title"] for article in articles]
-        return titles
-    else:
+    if response.status_code != 200:
         print("❌ Error fetching articles:", response.status_code)
         return []
+    articles = response.json().get("articles", [])
+    return [article["title"] for article in articles]
+
 
 def get_similarity_score(input_text, article_titles):
     texts = [input_text] + article_titles
