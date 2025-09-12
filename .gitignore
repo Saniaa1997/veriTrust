@@ -1,1 +1,7 @@
-"__pycache__/\n.env\n*.pyc" 
+__pycache__/
+.env
+*.pyc
+*.pyo
+*.pyd
+*.db
+
