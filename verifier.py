@@ -27,6 +27,19 @@ def fetch_related_articles(query):
 
 
 def verify_news(input_text):
+     """
+    Verifies a news headline or snippet by fetching relevant articles
+    and calculating similarity scores.
+
+    Args:
+        input_text (str): The news headline or text snippet to verify.
+
+    Returns:
+        tuple: (label, similarity_scores, articles)
+            label (str): "Likely True", "Likely False", or "Needs Verification"
+            similarity_scores (list): List of similarity scores
+            articles (list): List of fetched article summaries
+    """
     articles = fetch_related_articles(input_text)
     if not articles:
         print("No articles found — skipping similarity.")
