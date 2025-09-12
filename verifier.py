@@ -1,7 +1,9 @@
 import requests
+import streamlit as st
 
 NEWS_API_KEY = "0b81860a23a24383bf0e605ca2ef8bf7"  # replace with your NewsAPI key
 
+@st.cache_data(show_spinner=False)
 def fetch_related_articles(query):
     """Fetch top 5 related news article titles from NewsAPI."""
     url = (
@@ -14,6 +16,7 @@ def fetch_related_articles(query):
         return []
     articles = response.json().get("articles", [])
     return [article["title"] for article in articles]
+
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
