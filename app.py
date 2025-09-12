@@ -1,5 +1,8 @@
 import streamlit as st
 from verifier import verify_news
+if "history" not in st.session_state:
+    st.session_state.history = []
+
 
 st.title("📰 VeriTrust - Fake News Verifier")
 st.subheader("Check if a news headline is real or fake using AI 🔍")
@@ -32,7 +35,12 @@ if st.button("Verify"):
 
         except Exception as e:
             st.error(f"Something went wrong: {e}")
+st.session_state.history.append((input_text, label))
 
 st.markdown("---")
 st.markdown("Built with ❤️ during the Git Sprint Contest")
 st.caption("Powered by NewsAPI and AI-based similarity scoring")
+if st.session_state.history:
+    st.markdown("### 🔁 Past Verifications")
+    for i, (text, verdict) in enumerate(reversed(st.session_state.history[-5:]), 1):
+        st.markdown(f"{i}. _{text}_ → **{verdict}**")
