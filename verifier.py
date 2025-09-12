@@ -45,3 +45,6 @@ def verify_news(input_text):
         label = "Needs Verification"
 
     return label, similarity_scores, articles
+
+print("Articles fetched:", articles)
+print("Similarity scores:", similarity_scores)
