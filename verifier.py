@@ -28,3 +28,20 @@ def get_similarity_score(input_text, articles):
     similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
     return similarity
 
+def verify_news(input_text):
+    articles = fetch_related_articles(input_text)
+    similarity_scores = get_similarity_score(input_text, articles)
+
+    if not similarity_scores.any():
+        return "Needs Verification", [], []
+
+    avg_score = sum(similarity_scores) / len(similarity_scores)
+
+    if avg_score > 0.5:
+        label = "Likely True"
+    elif avg_score < 0.2:
+        label = "Likely False"
+    else:
+        label = "Needs Verification"
+
+    return label, similarity_scores, articles
