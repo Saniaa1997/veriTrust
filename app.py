@@ -31,3 +31,6 @@ if st.button("Verify"):
         except Exception as e:
             st.error(f"Something went wrong: {e}")
 
+st.markdown("---")
+st.markdown("Built with ❤️ during the Git Sprint Contest")
+st.caption("Powered by NewsAPI and AI-based similarity scoring")
