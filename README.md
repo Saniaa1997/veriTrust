@@ -36,3 +36,21 @@ pip install -r requirements.txt
 
 # 3. Run the app
 streamlit run app.py
+
+## 🚀 How to Run Locally
+
+Follow these steps to run VeriTrust on your machine:
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/your-username/veriTrust.git
+cd veriTrust
+
+python -m venv venv
+venv\Scripts\activate       # Windows
+source venv/bin/activate    # Mac/Linux
+pip install -r requirements.txt
+NEWS_API_KEY=V0b81860a23a24383bf0e605ca2ef8bf7
+streamlit run app.py
+
