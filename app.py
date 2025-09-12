@@ -5,6 +5,17 @@ if "history" not in st.session_state:
 
 
 st.title("📰 VeriTrust - Fake News Verifier")
+with st.expander("ℹ️ About this App"):
+    st.markdown("""
+    **VeriTrust** is an AI-based tool that helps you verify the trustworthiness of news headlines.
+
+    ✅ It compares your input with reliable articles using text similarity.  
+    🧠 It uses NLP techniques (TF-IDF, cosine similarity) and NewsAPI to fetch related content.  
+    🔐 No personal data is stored or shared — everything runs securely and privately in your browser.
+
+    > ⚠️ This tool is a proof-of-concept. Always cross-verify critical news manually from official sources.
+    """)
+
 st.subheader("Check if a news headline is real or fake using AI 🔍")
 
 input_text = st.text_input("Enter a news headline:")
