@@ -2,6 +2,8 @@ import requests
 import streamlit as st
 from dotenv import load_dotenv
 import os
+from utils import similarity_score
+
 
 load_dotenv()
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
@@ -23,18 +25,6 @@ def fetch_related_articles(query):
     return [article["title"] for article in articles]
 
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-def get_similarity_score(input_text, articles):
-    """Return similarity scores between input and list of articles."""
-    if not articles:
-        return []
-    documents = [input_text] + articles
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(documents)
-    similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
-    return similarity
 
 def verify_news(input_text):
     articles = fetch_related_articles(input_text)
