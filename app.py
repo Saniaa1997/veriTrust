@@ -13,7 +13,13 @@ if st.button("Verify"):
         try:
             label, scores, articles = verify_news(input_text)
             
-            st.write(f"### Verdict: {label}")
+            if label == "Likely True":
+                 st.success("✅ Verdict: Likely True")
+            elif label == "Likely False":
+                st.error("❌ Verdict: Likely False")
+            else:
+                st.warning("⚠️ Verdict: Needs Verification")
+
 
             if articles:
                 st.write("#### Related News Articles:")
