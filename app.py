@@ -11,7 +11,9 @@ if st.button("Verify"):
         st.warning("⚠️ Please enter a news headline before verifying.")
     else:
         try:
-            label, scores, articles = verify_news(input_text)
+            with st.spinner("🔎 Verifying..."):
+                label, scores, articles = verify_news(input_text)
+
             
             if label == "Likely True":
                  st.success("✅ Verdict: Likely True")
