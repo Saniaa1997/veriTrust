@@ -28,7 +28,11 @@ def fetch_related_articles(query):
 
 def verify_news(input_text):
     articles = fetch_related_articles(input_text)
-    similarity_scores = get_similarity_score(input_text, articles)
+    if not articles:
+        print("No articles found — skipping similarity.")
+        return ("Needs Verification", [], [])
+
+    similarity_scores = similarity_score(input_text, articles)
 
     if not similarity_scores.any():
         return "Needs Verification", [], []
@@ -44,5 +48,4 @@ def verify_news(input_text):
 
     return label, similarity_scores, articles
 
-print("Articles fetched:", articles)
-print("Similarity scores:", similarity_scores)
+
