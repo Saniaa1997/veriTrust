@@ -1,7 +1,12 @@
 import requests
 import streamlit as st
+from dotenv import load_dotenv
+import os
 
-NEWS_API_KEY = "0b81860a23a24383bf0e605ca2ef8bf7"  # replace with your NewsAPI key
+load_dotenv()
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+
+
 
 @st.cache_data(show_spinner=False)
 def fetch_related_articles(query):
