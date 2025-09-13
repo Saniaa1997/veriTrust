@@ -1,6 +1,6 @@
 import requests
 import os
- from utils import similarity_score
+from utils import similarity_score
 from dotenv import load_dotenv
 
 load_dotenv()
