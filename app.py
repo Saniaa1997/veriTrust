@@ -1,5 +1,5 @@
 import streamlit as st
-from verifier import verify_news
+import verifier as v
 
 st.set_page_config(
     page_title="VeriTrust - Fake News Verifier",
@@ -18,7 +18,7 @@ if st.button("✅ Verify"):
     if user_input.strip() == "":
         st.warning("⚠️ Please enter a valid news snippet to proceed.")
     else:
-        label, scores, articles = verify_news(user_input)
+        label, scores, articles = v.verify_news(user_input)
 
         # Display result
         st.markdown(f"### ✅ Prediction: `{label}`")
