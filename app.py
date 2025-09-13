@@ -1,5 +1,5 @@
 import streamlit as st
-from verifier import verify_news
+ from verifier import verify_news
 
 st.set_page_config(
     page_title="VeriTrust - Fake News Verifier",
