@@ -35,12 +35,12 @@ if st.button("Verify"):
                 st.error("❌ Verdict: Likely False")
             else:
                 st.warning("⚠️ Verdict: Needs Verification")
-                    st.markdown("### 🙋 Was this result helpful?")
-                    col1, col2 = st.columns(2)
-                    with col1:
+                st.markdown("### 🙋 Was this result helpful?")
+                col1, col2 = st.columns(2)
+                 with col1:
                         if st.button("👍 Yes"):
-                            st.success("Thanks for your feedback!")
-                    with col2:
+                         st.success("Thanks for your feedback!")
+                 with col2:
                         if st.button("👎 No"):
                             st.info("Thanks — we'll try to improve it!")
 
