@@ -1,66 +1,36 @@
 import streamlit as st
 from verifier import verify_news
-if "history" not in st.session_state:
-    st.session_state.history = []
 
+st.set_page_config(
+    page_title="VeriTrust - Fake News Verifier",
+    page_icon="🕵️",
+    layout="centered"
+)
 
-st.title("📰 VeriTrust - Fake News Verifier")
-with st.expander("ℹ️ About this App"):
-    st.markdown("""
-    **VeriTrust** is an AI-based tool that helps you verify the trustworthiness of news headlines.
+st.title("🕵️ VeriTrust - AI Fake News Verifier")
+st.markdown("Enter a news headline or short news snippet below to verify its trustworthiness.")
 
-    ✅ It compares your input with reliable articles using text similarity.  
-    🧠 It uses NLP techniques (TF-IDF, cosine similarity) and NewsAPI to fetch related content.  
-    🔐 No personal data is stored or shared — everything runs securely and privately in your browser.
+# User input
+user_input = st.text_area("📝 Enter news headline or snippet:", height=100)
 
-    > ⚠️ This tool is a proof-of-concept. Always cross-verify critical news manually from official sources.
-    """)
-
-st.subheader("Check if a news headline is real or fake using AI 🔍")
-
-input_text = st.text_input("Enter a news headline:")
-
-if st.button("Verify"):
-    if not input_text.strip():
-        st.warning("⚠️ Please enter a news headline before verifying.")
+# Verify button
+if st.button("✅ Verify"):
+    if user_input.strip() == "":
+        st.warning("⚠️ Please enter a valid news snippet to proceed.")
     else:
-        try:
-            with st.spinner("🔎 Verifying..."):
-                label, scores, articles = verify_news(input_text)
+        label, scores, articles = verify_news(user_input)
 
-            
-            if label == "Likely True":
-                 st.success("✅ Verdict: Likely True")
-            elif label == "Likely False":
-                st.error("❌ Verdict: Likely False")
-            else:
-                st.warning("⚠️ Verdict: Needs Verification")
-                st.markdown("### 🙋 Was this result helpful?")
-                col1, col2 = st.columns(2)
-                with col1:
-                        if st.button("👍 Yes"):
-                         st.success("Thanks for your feedback!")
-                with col2:
-                        if st.button("👎 No"):
-                            st.info("Thanks — we'll try to improve it!")
+        # Display result
+        st.markdown(f"### ✅ Prediction: `{label}`")
 
+        if articles:
+            st.markdown("### 🔍 Top Matching Articles:")
+            for i, article in enumerate(articles):
+                st.markdown(f"**{i+1}.** {article}  \nSimilarity Score: `{scores[i]:.2f}`")
 
-
-            if articles:
-                st.write("#### Related News Articles:")
-                for i, (article, score) in enumerate(zip(articles, scores)):
-                    st.markdown(f"**{i+1}.** {article}  \n_Similarity: {score:.2f}_")
-            else:
-                st.info("No related articles found. Please try a different headline.")
-
-        except Exception as e:
-            st.error(f"Something went wrong: {e}")
-st.session_state.history.append((input_text, label))
-
-st.markdown("---")
-st.markdown("Built with ❤️ during the Git Sprint Contest")
-st.caption("Powered by NewsAPI and AI-based similarity scoring")
-if st.session_state.history:
-    st.markdown("### 🔁 Past Verifications")
-    for i, (text, verdict) in enumerate(reversed(st.session_state.history[-5:]), 1):
-        st.markdown(f"{i}. _{text}_ → **{verdict}**")
+        st.markdown("### 🙋 Was this result helpful?")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.button("👍 Yes")
+        with col2:
+            st.button("👎 No")
