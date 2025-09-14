@@ -1,17 +1,27 @@
 from sentence_transformers import SentenceTransformer, util
 
-# Load model once globally
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-def similarity_score(input_text, article_titles):
+def similarity_score(input_text, articles):
     """
-    Computes semantic similarity (BERT-based) between input and real news articles.
+    Computes similarity between input_text and each article['title']
+    Returns list of (title, url, similarity)
     """
-    # Combine input + articles
-    embeddings = model.encode([input_text] + article_titles, convert_to_tensor=True)
-    
+    titles = [a["title"] for a in articles]
+    embeddings = model.encode([input_text] + titles, convert_to_tensor=True)
     input_embedding = embeddings[0]
     article_embeddings = embeddings[1:]
 
-    scores = util.pytorch_cos_sim(input_embedding, article_embeddings)[0]
-    return scores.cpu().numpy()  # return as list of floats
+    scores = util.pytorch_cos_sim(input_embedding, article_embeddings)[0].cpu().numpy()
+
+    results = []
+    for i in range(len(articles)):
+        results.append({
+            "title": articles[i]["title"],
+            "url": articles[i]["url"],
+            "score": float(scores[i])
+        })
+    
+    # Sort by descending similarity
+    results = sorted(results, key=lambda x: x["score"], reverse=True)
+    return results

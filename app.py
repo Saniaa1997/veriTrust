@@ -1,5 +1,5 @@
 import streamlit as st
-from verifier import get_latest_headlines
+from verifier import get_latest_articles
 from utils import similarity_score
 
 st.set_page_config(page_title="VeriTrust", page_icon="🕵️", layout="centered")
@@ -9,21 +9,23 @@ user_input = st.text_input("📰 Enter a news headline or article to verify:")
 
 if user_input:
     with st.spinner("🔍 Verifying with real-time news data..."):
-        real_articles = get_latest_headlines()
+        articles = get_latest_articles()
 
-        if not real_articles:
-            st.error("⚠️ Could not fetch headlines. Please check your API key or try again later.")
+        if not articles:
+            st.error("⚠️ Could not fetch news headlines.")
         else:
-            scores = similarity_score(user_input, real_articles)
-            max_score = max(scores)
-            most_similar = real_articles[scores.argmax()]
+            top_results = similarity_score(user_input, articles)[:5]
+            top_score = top_results[0]["score"]
 
-            st.markdown("### 📰 Most Similar Real News:")
-            st.info(most_similar)
+            st.markdown("### 📰 Top 5 Most Similar Real News Articles:")
 
-            st.markdown(f"### 📊 Similarity Score: `{max_score:.2f}`")
+            for i, result in enumerate(top_results, start=1):
+                st.markdown(
+                    f"**{i}.** [{result['title']}]({result['url']})  \n"
+                    f"Similarity Score: `{result['score']:.2f}`"
+                )
 
-            if max_score >= 0.35:
+            if top_score >= 0.4:
                 st.success("✅ This news is likely REAL based on recent headlines.")
             else:
-                st.error("❌ This news might be FAKE or not supported by recent headlines.")
+                st.error("❌ This news might be FAKE or unverifiable.")
