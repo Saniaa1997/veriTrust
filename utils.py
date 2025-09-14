@@ -1,20 +1,17 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer, util
+
+# Load model once globally
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def similarity_score(input_text, article_titles):
-     """
-    Computes cosine similarity between input text and list of articles.
-
-    Args:
-        input_text (str): User input text
-        articles (list): List of article texts
-
-    Returns:
-        list: similarity scores
     """
-    """Compute similarity score between input and article titles."""
-    vectorizer = TfidfVectorizer()
-    vectors = vectorizer.fit_transform([input_text] + article_titles)
-    scores = cosine_similarity(vectors[0:1], vectors[1:]).flatten()
-    return scores
- 
+    Computes semantic similarity (BERT-based) between input and real news articles.
+    """
+    # Combine input + articles
+    embeddings = model.encode([input_text] + article_titles, convert_to_tensor=True)
+    
+    input_embedding = embeddings[0]
+    article_embeddings = embeddings[1:]
+
+    scores = util.pytorch_cos_sim(input_embedding, article_embeddings)[0]
+    return scores.cpu().numpy()  # return as list of floats
